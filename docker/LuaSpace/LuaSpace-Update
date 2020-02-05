@@ -4,6 +4,7 @@ updateFixes () {
     cd /usr/LuaSpace
     git clone https://gitlab.com/svaltek/DevTools/alpine-luadev-fixes.git
     mv alpine-luadev-fixes LuaSpaceFixes
+    chmod +x -R /usr/LuaSpace/LuaSpaceFixes/*
 }
 
 clear
