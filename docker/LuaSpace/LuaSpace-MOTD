@@ -3,12 +3,11 @@
 # Need to Install the Language Server Manualy on First Run
 # Lets "Almost" automate that....
 LS_FirstRun () {
-	# Dont run this again
-	touch ~/.LuaSpace
     clear
     echo ' '
     echo '  >> First Run..!'
     echo 'Executing LuaSpace-FixAll in the terminal NOW. to finish Configuring vscode....'
+    echo '!LuaSpace' >> ~/.LuaSpace
     LuaSpace-FixAll
 }
 
@@ -22,7 +21,7 @@ LS_MOTD () {
 }
 
 
-if [ ! -f "~/.LuaSpace" ]; then
+if [ ! -f ~/.LuaSpace ]; then
     LS_FirstRun
 else
     LS_MOTD
