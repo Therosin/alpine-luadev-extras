@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-gxx
+FROM alpine:latest
 
 LABEL maintainer="Theros - theros@svaltek.xyz"
 
@@ -6,30 +6,6 @@ LABEL maintainer="Theros - theros@svaltek.xyz"
 COPY ./docker/LuaSpace /usr/LuaSpace
 RUN chmod 777 -R /usr/LuaSpace
 
-# Install linuxBrew
-RUN apk update \
-    && apk --no-cache add bash curl file g++ git libc6-compat make ruby ruby-bigdecimal ruby-etc ruby-irb ruby-json ruby-test-unit sudo \
-    && adduser -D -s /bin/bash linuxbrew \
-    && echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
-
-USER linuxbrew
-WORKDIR /home/linuxbrew
-ENV PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH \
-    SHELL=/bin/bash \
-    USER=linuxbrew
-
-RUN ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)" \
-    && HOMEBREW_NO_ANALYTICS=1 brew install -s patchelf \
-    && HOMEBREW_NO_ANALYTICS=1 brew install --ignore-dependencies binutils gmp isl@0.18 libmpc linux-headers mpfr zlib \
-    && (HOMEBREW_NO_ANALYTICS=1 brew install --ignore-dependencies gcc || true) \
-    && HOMEBREW_NO_ANALYTICS=1 brew install glibc \
-    && HOMEBREW_NO_ANALYTICS=1 brew postinstall gcc \
-    && HOMEBREW_NO_ANALYTICS=1 brew remove patchelf \
-    && HOMEBREW_NO_ANALYTICS=1 brew install -s patchelf \
-    && HOMEBREW_NO_ANALYTICS=1 brew config
-
-USER root
-WORKDIR /root
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 # property in devcontainer.json to use it. On Linux, the container user's GID/UIDs
 # will be updated to match your local UID/GID (when using the dockerFile property).
@@ -56,6 +32,31 @@ RUN apk update \
     && /bin/ash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
     && rm /tmp/common-setup.sh
 
+# Install linuxBrew
+RUN apk update \
+    && apk --no-cache add bash curl file g++ git libc6-compat make ruby ruby-bigdecimal ruby-etc ruby-irb ruby-json ruby-test-unit\
+    && apk --update add grep \
+    && adduser -D -s /bin/bash linuxbrew \
+    && echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+
+USER linuxbrew
+WORKDIR /home/linuxbrew
+ENV PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH \
+    SHELL=/bin/bash \
+    USER=linuxbrew
+
+RUN ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)" \
+    && HOMEBREW_NO_ANALYTICS=1 brew install -s patchelf \
+    && HOMEBREW_NO_ANALYTICS=1 brew install --ignore-dependencies binutils gmp isl@0.18 libmpc linux-headers mpfr zlib \
+    && (HOMEBREW_NO_ANALYTICS=1 brew install --ignore-dependencies gcc || true) \
+    && HOMEBREW_NO_ANALYTICS=1 brew install glibc \
+    && HOMEBREW_NO_ANALYTICS=1 brew postinstall gcc \
+    && HOMEBREW_NO_ANALYTICS=1 brew remove patchelf \
+    && HOMEBREW_NO_ANALYTICS=1 brew install -s patchelf \
+    && HOMEBREW_NO_ANALYTICS=1 brew config
+
+USER root
+WORKDIR /home/vscode
 # Configure Zsh and Antigen
 RUN echo install and configure antigen... \
     && echo export PATH=/usr/LuaSpace:$PATH >> /home/vscode/.zshrc \
