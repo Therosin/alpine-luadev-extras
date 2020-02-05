@@ -3,11 +3,7 @@ FROM frolvlad/alpine-gxx
 LABEL maintainer="Theros - theros@svaltek.xyz"
 
 # copy LuaSpace Scripts into Container
-<<<<<<< HEAD
 COPY ./docker/LuaSpace /usr/LuaSpace
-=======
-COPY ./LuaSpace /usr/LuaSpace
->>>>>>> 9f6ef4fe4b35b8dfc5502b9c1c79f6e8d9d22523
 RUN chmod 777 -R /usr/LuaSpace
 
 #Install Lua
@@ -74,8 +70,8 @@ ENV GOPATH /go
 ENV PATH /go/bin:$PATH
 
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin \
-# Install Some Usefull golang tools
-	&& echo Installing Golang Utils \
+    # Install Some Usefull golang tools
+    && echo Installing Golang Utils \
     && go get -u github.com/Masterminds/glide/... \
     && go get github.com/yudai/gotty\
     # Compile and install Algernon
@@ -105,47 +101,47 @@ ARG COMMON_SCRIPT_SHA="dev-mode"
 # Install git, bash, dependencies, and add a non-root user
 RUN apk update \
     && apk add --no-cache wget nano coreutils ca-certificates ruby-full \
-	&& echo 'Set disable_coredump false' >> /etc/sudo.conf \
+    && echo 'Set disable_coredump false' >> /etc/sudo.conf \
     #
     # Verify git, common tools / libs installed, add/modify non-root user, optionally install zsh
     && wget -q -O /tmp/common-setup.sh $COMMON_SCRIPT_SOURCE \
     && if [ "$COMMON_SCRIPT_SHA" != "dev-mode" ]; then echo "$COMMON_SCRIPT_SHA /tmp/common-setup.sh" | sha256sum -c - ; fi \
     && /bin/ash /tmp/common-setup.sh "$INSTALL_ZSH" "$USERNAME" "$USER_UID" "$USER_GID" \
     && rm /tmp/common-setup.sh \
-	# update glibc
-	&& apk --no-cache add ca-certificates wget \
-	&& wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
-	&& wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk \
-	&& apk --no-cache add glibc-2.30-r0.apk \
-	&& apk --no-cache add bash build-base curl file git gzip ncurses ruby ruby-dbm ruby-etc ruby-irb ruby-json sudo clang clang-dev ninja \
-	&& apk --update add grep
-	
+    # update glibc
+    && apk --no-cache add ca-certificates wget \
+    && wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
+    && wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk \
+    && apk --no-cache add glibc-2.30-r0.apk \
+    && apk --no-cache add bash build-base curl file git gzip ncurses ruby ruby-dbm ruby-etc ruby-irb ruby-json sudo clang clang-dev ninja \
+    && apk --update add grep
+
 
 RUN echo install and configure antigen... \
-	&& echo export PATH=/usr/LuaSpace:$PATH >> /home/vscode/.zshrc \
+    && echo export PATH=/usr/LuaSpace:$PATH >> /home/vscode/.zshrc \
     && mkdir -p /home/vscode/.antigen \
     && curl -L git.io/antigen > /home/vscode/.antigen/antigen.zsh \
     && echo source /home/vscode/.antigen/antigen.zsh >> /home/vscode/.zshrc \
     && echo antigen init /home/vscode/.antigenrc >> /home/vscode/.zshrc \
-	&& echo 'LuaSpace-MOTD' >> /home/vscode/.zshrc \
+    && echo 'LuaSpace-MOTD' >> /home/vscode/.zshrc \
     && curl -o  /home/vscode/.antigenrc https://gitlab.com/svaltek/DevTools/luaspace-vscode/snippets/1936507/raw \
-	&& chown -R vscode:vscode /home/vscode/.antigen && chown vscode:vscode /home/vscode/.antigenrc
-	
+    && chown -R vscode:vscode /home/vscode/.antigen && chown vscode:vscode /home/vscode/.antigenrc
+
 USER vscode
 RUN echo 'Fixing Wndows Line Endings Bug ref: https://stackoverflow.com/questions/36994298/oh-my-zsh-command-not-found-m' \
-	&& git config --global core.autocrlf false \
-	&& find /home/vscode -name "*.sh" | xargs  dos2unix -u \
-	&& find /home/vscode -name "*.zsh" | xargs  dos2unix -u \
-	&& mkdir -p ~/.z \
-	&& echo Installing sumneko lua language server \
-	&& mkdir -p ~/src && cd ~/src \
-	&& git clone https://github.com/sumneko/vscode-lua \
-	&& cd vscode-lua \
-	&& git submodule update --init --recursive \
-	&& cd server/3rd/luamake \
-	&& ninja -f ninja/linux.ninja \
-	&& cd ../../ \
-	&& 3rd/luamake/luamake rebuild
-	
+    && git config --global core.autocrlf false \
+    && find /home/vscode -name "*.sh" | xargs  dos2unix -u \
+    && find /home/vscode -name "*.zsh" | xargs  dos2unix -u \
+    && mkdir -p ~/.z \
+    && echo Installing sumneko lua language server \
+    && mkdir -p ~/src && cd ~/src \
+    && git clone https://github.com/sumneko/vscode-lua \
+    && cd vscode-lua \
+    && git submodule update --init --recursive \
+    && cd server/3rd/luamake \
+    && ninja -f ninja/linux.ninja \
+    && cd ../../ \
+    && 3rd/luamake/luamake rebuild
+
 # Done Revert to root User for VSCode first run
 USER root
