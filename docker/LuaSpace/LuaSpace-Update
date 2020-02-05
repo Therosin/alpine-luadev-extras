@@ -2,8 +2,9 @@
 
 updateFixes () {
     cd /usr/LuaSpace
+    sudo rm -rf LuaSpaceFixes
     git clone https://gitlab.com/svaltek/DevTools/alpine-luadev-fixes.git
-    mv alpine-luadev-fixes LuaSpaceFixes
+    mv /usr/LuaSpace/alpine-luadev-fixes /usr/LuaSpace/LuaSpaceFixes
     chmod +x -R /usr/LuaSpace/LuaSpaceFixes/*
 }
 
