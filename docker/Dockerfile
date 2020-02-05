@@ -68,19 +68,7 @@ RUN apk add --no-cache git make musl-dev go
 ENV GOROOT /usr/lib/go
 ENV GOPATH /go
 ENV PATH /go/bin:$PATH
-
 RUN mkdir -p ${GOPATH}/src ${GOPATH}/bin \
-    # Install Some Usefull golang tools
-    && echo Installing Golang Utils \
-    && go get -u github.com/Masterminds/glide/... \
-    && go get github.com/yudai/gotty\
-    # Compile and install Algernon
-    &&echo Installing Algernon \
-    && mkdir -p /usr/src \
-    && cd /usr/src \
-    && git clone https://github.com/xyproto/algernon \
-    && cd algernon \
-    && go build -mod=vendor \
     && echo Finished....
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
@@ -128,7 +116,11 @@ RUN echo install and configure antigen... \
     && chown -R vscode:vscode /home/vscode/.antigen && chown vscode:vscode /home/vscode/.antigenrc
 
 USER vscode
-RUN echo 'Fixing Wndows Line Endings Bug ref: https://stackoverflow.com/questions/36994298/oh-my-zsh-command-not-found-m' \
+# Install Some Usefull golang tools
+RUN	echo Installing Golang Utils \
+    && go get -u github.com/Masterminds/glide/... \
+    && go get github.com/yudai/gotty\
+	&& echo 'Fixing Wndows Line Endings Bug ref: https://stackoverflow.com/questions/36994298/oh-my-zsh-command-not-found-m' \
     && git config --global core.autocrlf false \
     && find /home/vscode -name "*.sh" | xargs  dos2unix -u \
     && find /home/vscode -name "*.zsh" | xargs  dos2unix -u \
