@@ -1,0 +1,4 @@
+version: '2'
+services:
+  alpine-dev-extras:
+    build: docker

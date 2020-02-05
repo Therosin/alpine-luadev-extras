@@ -1,0 +1,11 @@
+#! /bin/bash
+
+clear
+echo ''
+echo 'Attempting to install sumneko lua-language-server'
+cd ~/src/vscode-lua
+server/build/lua -e 'package.cpath = "./server/build/?.so;" .. package.cpath' make/copy.lua /home/vscode/.vscode-server/extensions/
+# Unfortunatly the user still needs to restart vscode manualy
+echo ' '
+echo '  >> If there were No Errors above then all you need to do now is restart vscode'
+echo '  Ctrl+Shft+P to Open the Command Palette type:  Reload   then  Select:  Reload Window'
