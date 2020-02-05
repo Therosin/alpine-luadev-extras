@@ -1,0 +1,18 @@
+#! /bin/bash
+
+updateFixes () {
+    cd /usr/LuaSpace
+    git clone https://gitlab.com/svaltek/DevTools/alpine-luadev-fixes.git
+    mv alpine-luadev-fixes LuaSpaceFixes
+}
+
+clear
+echo ''
+echo ' LuaSpace Updating'
+
+# Update LuaDev FixScripts
+updateFixes
+
+echo ''
+echo ' All Done...'
+cd ~/
