@@ -1,0 +1,29 @@
+#! /bin/bash
+
+# Need to Install the Language Server Manualy on First Run
+# Lets "Almost" automate that....
+LS_FirstRun () {
+	# Dont run this again
+	touch ~/.LuaSpace
+    clear
+    echo ' '
+    echo '  >> First Run..!'
+    echo 'Executing LuaSpace-FixAll in the terminal NOW. to finish Configuring vscode....'
+    LuaSpace-FixAll
+}
+
+
+LS_MOTD () {
+    clear
+    echo '  >> Welcome to LuaSpace'
+    echo '  Useful Commands:        (Hint: use tab for completions)'
+    echo '  luarocks (lua package manager), glide (Go package manager), git'
+    echo '  brew (homebrew package manager), LuaSpace-FixAll (fix container problems)'
+}
+
+
+if [ ! -f "~/.LuaSpace" ]; then
+    LS_FirstRun
+else
+    LS_MOTD
+fi
