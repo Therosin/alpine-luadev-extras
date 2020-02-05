@@ -3,7 +3,11 @@ FROM frolvlad/alpine-gxx
 LABEL maintainer="Theros - theros@svaltek.xyz"
 
 # copy LuaSpace Scripts into Container
+<<<<<<< HEAD
 COPY ./docker/LuaSpace /usr/LuaSpace
+=======
+COPY ./LuaSpace /usr/LuaSpace
+>>>>>>> 9f6ef4fe4b35b8dfc5502b9c1c79f6e8d9d22523
 RUN chmod 777 -R /usr/LuaSpace
 
 #Install Lua
