@@ -53,25 +53,25 @@ RUN ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/ma
     && HOMEBREW_NO_ANALYTICS=1 brew postinstall gcc \
     && HOMEBREW_NO_ANALYTICS=1 brew remove patchelf \
     && HOMEBREW_NO_ANALYTICS=1 brew install -s patchelf \
-    && HOMEBREW_NO_ANALYTICS=1 brew config
+    && HOMEBREW_NO_ANALYTICS=1 brew config \
+    && sudo chown vscode /home/linuxbrew/.linuxbrew -R \
+    && sudo chmod u+w /home/linuxbrew/.linuxbrew -R
 
-USER root
+USER vscode
 WORKDIR /home/vscode
 # Configure Zsh and Antigen
 RUN echo install and configure antigen... \
     && echo export PATH=/usr/LuaSpace:$PATH >> /home/vscode/.zshrc \
     && mkdir -p /home/vscode/.antigen \
-    && mkdir -p /home/vscode/.z && chown vscode:vscode /home/vscode/.z \
     && curl -L git.io/antigen > /home/vscode/.antigen/antigen.zsh \
     && echo source /home/vscode/.antigen/antigen.zsh >> /home/vscode/.zshrc \
     && echo antigen init /home/vscode/.antigenrc >> /home/vscode/.zshrc \
     && echo 'LuaSpace-MOTD' >> /home/vscode/.zshrc \
     && curl -o  /home/vscode/.antigenrc https://gitlab.com/svaltek/DevTools/luaspace-vscode/snippets/1936507/raw \
-    && chown -R vscode:vscode /home/vscode/.antigen && chown vscode:vscode /home/vscode/.antigenrc \
+    && sudo chown -R vscode:vscode /home/vscode/.antigen && chown vscode:vscode /home/vscode/.antigenrc \
     && echo 'Fixing Wndows Line Endings Bug ref: https://stackoverflow.com/questions/36994298/oh-my-zsh-command-not-found-m' \
     && git config --global core.autocrlf false \
     && find /home/vscode -name "*.sh" | xargs  dos2unix -u \
     && find /home/vscode -name "*.zsh" | xargs  dos2unix -u \
     && echo '   All done....'
-# Done Revert to root User for VSCode first run
 USER root
