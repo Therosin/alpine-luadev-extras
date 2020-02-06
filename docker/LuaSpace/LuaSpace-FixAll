@@ -1,8 +1,8 @@
 #! /bin/bash
-arg=$1
+arg1=$1
 clear
 echo ''
 LuaSpace-Update
 
 # Running LuaSpace-FixList with no Args (FixAll)
-/usr/LuaSpace/LuaSpaceFixes/LuaSpace-FixList $arg
+/usr/LuaSpace/LuaSpaceFixes/LuaSpace-FixList "$arg1"

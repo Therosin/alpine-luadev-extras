@@ -8,7 +8,7 @@ LS_FirstRun () {
     echo '  >> First Run..!'
     echo 'Executing LuaSpace-FixAll in the terminal NOW. to finish Configuring vscode....'
     echo '!LuaSpace' >> ~/.LuaSpace
-    LuaSpace-FixAll
+    LuaSpace-FixAll INSTALL
 }
 
 
